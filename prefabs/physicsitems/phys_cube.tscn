@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://du2aryfb8ja0w"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bmxkw"]
+
+[node name="phys_cube" type="RigidBody3D" unique_id=1035076312]
+mass = 0.05
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1583745864]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1589331222]
+shape = SubResource("BoxShape3D_bmxkw")

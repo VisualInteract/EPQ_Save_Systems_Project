@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://cgq26ptbswc37"]
+
+[ext_resource type="Script" uid="uid://y1t7wikd8drw" path="res://Scripts/Player.gd" id="1_4flbx"]
+[ext_resource type="Texture2D" uid="uid://cffj6bco1gqke" path="res://textures/kenney_crosshair-pack/PNG/Dark/crosshair-000.png" id="2_4dohe"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bmxkw"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_fj7yv"]
+points = PackedVector3Array(-0.12520654, -0.532801, -0.4805069, 0.022783129, 0.4760704, 0.49888408, 0.16971254, 0.5591441, 0.46417162, 0.23105091, -0.8035912, 0.32045516, 0.40741014, 0.651043, -0.24352328, -0.4827893, 0.59484255, 0.082213186, -0.3628679, -0.68231165, 0.2896967, 0.46904355, -0.65452886, -0.06627126, -0.12744367, 0.8427015, -0.33810276, -0.39343542, -0.6839421, -0.24471663, 0.43825462, 0.62330925, 0.20084947, 0.0841477, 0.977454, 0.11479468, -0.06820232, -0.9764576, -0.12927033, 0.20054972, -0.56312895, -0.4514544, -0.18552664, 0.59545326, -0.4534751, -0.27336287, 0.59226835, 0.40775412, -0.0069364863, -0.47682306, 0.49966025, 0.37582088, -0.5886136, 0.31695515, 0.111579016, 0.5630594, -0.48117727, -0.41725034, 0.5278656, -0.27049688, -0.48454633, -0.59697217, -0.06650971, -0.27974695, 0.90856135, 0.05333608, -0.25019687, -0.8807117, 0.20531891, 0.263647, -0.90277094, -0.1273943, 0.29336792, 0.8715263, -0.15719566, 0.3734115, -0.5263189, -0.32824618, 0.4996626, 0.47664148, -0.0068885577, 0.053105574, 0.8750009, 0.32470253, -0.15454252, -0.5908538, 0.4658794, -0.09727988, -0.7823577, -0.39818847, -0.3876489, -0.49817133, 0.31564978, -0.30067965, -0.58799505, -0.38890144)
+
+[sub_resource type="Gradient" id="Gradient_4dohe"]
+colors = PackedColorArray(0.39308554, 0.3930855, 0.39308548, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_r81tb"]
+gradient = SubResource("Gradient_4dohe")
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_boehr"]
+gradient = SubResource("Gradient_4dohe")
+
+[node name="Player" type="CharacterBody3D" unique_id=624146296]
+script = ExtResource("1_4flbx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=147121918]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0129052, 0)
+mesh = SubResource("CapsuleMesh_bmxkw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=745553524]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0129052, 0)
+shape = SubResource("ConvexPolygonShape3D_fj7yv")
+
+[node name="Head" type="Node3D" parent="." unique_id=1025182565]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2765146, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=1564974744]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25521564, 0)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1005288767]
+
+[node name="HUD" type="Control" parent="CanvasLayer" unique_id=107648436]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Crosshair" type="TextureRect" parent="CanvasLayer/HUD" unique_id=1743280326]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_right = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_4dohe")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="bar_health" type="TextureProgressBar" parent="CanvasLayer/HUD" unique_id=1158533600]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -536.0
+offset_top = 279.0
+offset_right = -280.0
+offset_bottom = 281.0
+grow_vertical = 0
+scale = Vector2(1, 5)
+max_value = 200.0
+value = 200.0
+allow_greater = true
+allow_lesser = true
+texture_under = SubResource("GradientTexture1D_r81tb")
+texture_progress = SubResource("GradientTexture1D_boehr")
+tint_progress = Color(0, 0, 0.64705884, 1)
