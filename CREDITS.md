@@ -9,7 +9,7 @@ The following free assets were used in the creation of this game:
 
 * **Crosshair Pack** by Kenney.nl
   * **Source:** https://kenney.nl/assets/crosshair-pack
-  * **License:** Creative Commons CCO
+  * **License:** Creative Commons CC0
 
 ## 3. Original Work
 All custom GDScript code, level design, and project structuring within this repository are original works created by *Devran Karatas* for the purpose of an Extended Project Qualification (EPQ), licensed under the repository's root MIT License.
