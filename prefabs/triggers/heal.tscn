@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://cdf8xploonx0n"]
+
+[ext_resource type="Script" uid="uid://b6k11g8i5ktta" path="res://prefabs/triggers/heal.gd" id="1_jnkoe"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bmxkw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bmxkw"]
+albedo_color = Color(0.27058825, 0.84313726, 0.20784314, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bmxkw"]
+material = SubResource("StandardMaterial3D_bmxkw")
+
+[sub_resource type="Skin" id="Skin_r81tb"]
+
+[node name="heal" type="Area3D" unique_id=1940178038]
+script = ExtResource("1_jnkoe")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=737110088]
+shape = SubResource("BoxShape3D_bmxkw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1444045209]
+transparency = 0.5
+cast_shadow = 0
+mesh = SubResource("BoxMesh_bmxkw")
+skin = SubResource("Skin_r81tb")
