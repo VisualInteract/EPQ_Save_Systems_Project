@@ -3,6 +3,11 @@ extends CharacterBody3D
 # to get the Health bar HUD working...
 @onready var bar_health: TextureProgressBar = $CanvasLayer/HUD/bar_health
 
+# to pick up stuff...
+@onready var raycast: RayCast3D = $Head/Camera3D/InteractionRay
+@onready var hold_position: Marker3D = $Head/Camera3D/HoldPosition
+var held_object: RigidBody3D = null
+
 # The tutorial does not show how to add stats such as health.
 # I attempt to add this myself with documentation.
 var health = 200 # We will actually give the player 200 HP.
@@ -64,6 +69,54 @@ func _unhandled_input(event):
 		head.rotate_y(-event.relative.x * SENSITIVITY)
 		camera.rotate_x(-event.relative.y * SENSITIVITY)
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-70), deg_to_rad(85))
+	
+	if event.is_action_pressed("interact"): # script for init the cube pickup
+		if held_object:
+			drop_cube()
+		else:
+			try_pickup_cube()
+
+func try_pickup_cube() -> void:
+	# check if the raycast is hitting something
+	if raycast.is_colliding():
+		var collider = raycast.get_collider()
+		
+		# check the object is a RigidBody3D and belongs to the 'phys_prop' group
+		if collider is RigidBody3D and collider.is_in_group("phys_prop"):
+			held_object = collider
+			
+			# disable physics so it doesn't fall or collide with the player [added this option but commented it out because i want the cube to still interact with physics]
+			# held_object.freeze = true
+			held_object.gravity_scale = 0.0 # set the gravity to 0 so it doesn't fall.
+			
+			# parent it to the hold marker
+			held_object.get_parent().remove_child(held_object)
+			hold_position.add_child(held_object)
+			
+			# snap position and rotation to the holding point
+			held_object.position = Vector3.ZERO
+			held_object.rotation = Vector3.ZERO
+			
+func drop_cube() -> void:
+	if not held_object:
+		return
+		
+	# store the current global position
+	var current_global_transform = held_object.global_transform
+	
+	# move the cube back to the root of scene
+	hold_position.remove_child(held_object)
+	get_tree().current_scene.add_child(held_object)
+	
+	# restore its position in the world
+	held_object.global_transform = current_global_transform
+	
+	# turn physics back on [commented out for redundancy - physics was not disabled]
+	# held_object.freeze = false
+	held_object.gravity_scale = 1.0 # gravity is reset so that the item does fall when not held.
+	
+	# clear reference
+	held_object = null
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -86,6 +139,16 @@ func _physics_process(delta: float) -> void:
 		speed = SPRINT_SPEED
 	else:
 		speed = WALK_SPEED
+	
+	if held_object: # Handle holding items
+		# find the vector pointing from the cube to holdmarker
+		var target_vector = hold_position.global_position - held_object.global_position
+		
+		# apply a physical velocity to pull it there
+		held_object.linear_velocity = target_vector * 15.0
+		
+		# keep the cube's rotation matching camera look angle
+		held_object.angular_velocity = Vector3.ZERO 
 	
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
