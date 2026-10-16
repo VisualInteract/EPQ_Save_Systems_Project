@@ -40,5 +40,5 @@ func _on_body_exited(body: Node3D) -> void:
 		player_node = null
 
 func _apply_heal_to_player() -> void:
-	if player_node and player_node.has_method("_takeheal"):
+	if player_node and player_node.has_method("_heal"):
 		player_node._heal(heal_amount)
