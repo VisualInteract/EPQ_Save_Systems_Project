@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://y1t7wikd8drw" path="res://Scripts/Player.gd" id="1_4flbx"]
 [ext_resource type="Texture2D" uid="uid://cffj6bco1gqke" path="res://textures/kenney_crosshair-pack/PNG/Dark/crosshair-000.png" id="2_4dohe"]
+[ext_resource type="Script" uid="uid://bndoddmw7sbd8" path="res://Scripts/pause_menu.gd" id="3_r66lb"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bmxkw"]
 
@@ -16,6 +17,58 @@ gradient = SubResource("Gradient_4dohe")
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_boehr"]
 gradient = SubResource("Gradient_4dohe")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r66lb"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1txc5"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.6)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ht1c8"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.225, 0.225, 0.225, 0.6)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g2jcq"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.3)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u51tk"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.75)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_detail = 5
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="SystemFont" id="SystemFont_481f1"]
+subpixel_positioning = 0
 
 [node name="Player" type="CharacterBody3D" unique_id=624146296]
 script = ExtResource("1_4flbx")
@@ -89,3 +142,64 @@ allow_lesser = true
 texture_under = SubResource("GradientTexture1D_r81tb")
 texture_progress = SubResource("GradientTexture1D_boehr")
 tint_progress = Color(0, 0, 0.64705884, 1)
+
+[node name="PauseMenu" type="CanvasLayer" parent="." unique_id=730381066]
+process_mode = 3
+layer = 10
+script = ExtResource("3_r66lb")
+
+[node name="ColorRect" type="ColorRect" parent="PauseMenu" unique_id=1230519057]
+offset_right = 1161.0
+offset_bottom = 654.0
+color = Color(0, 0, 0, 0.27450982)
+
+[node name="Button" type="Button" parent="PauseMenu" unique_id=1540168394]
+offset_right = 8.0
+offset_bottom = 8.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_r66lb")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_1txc5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ht1c8")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_g2jcq")
+theme_override_styles/focus = SubResource("StyleBoxFlat_u51tk")
+text = "Resume"
+
+[node name="Label" type="Label" parent="PauseMenu" unique_id=1906538727]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -137.0
+offset_right = 211.0
+grow_vertical = 0
+theme_override_fonts/font = SubResource("SystemFont_481f1")
+text = "Press ESC to unlock mouse.
+WASD = Move
+MOUSE = Look
+SPACE = Jump
+E = Pickup a prop
+TAB = Pause"
+
+[node name="Button2" type="Button" parent="PauseMenu" unique_id=644662330]
+offset_left = 71.0
+offset_right = 141.0
+offset_bottom = 31.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_r66lb")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_1txc5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ht1c8")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_g2jcq")
+theme_override_styles/focus = SubResource("StyleBoxFlat_u51tk")
+text = "Reload Map"
+
+[node name="Button3" type="Button" parent="PauseMenu" unique_id=963701910]
+offset_left = 172.0
+offset_right = 272.0
+offset_bottom = 31.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_r66lb")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_1txc5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ht1c8")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_g2jcq")
+theme_override_styles/focus = SubResource("StyleBoxFlat_u51tk")
+text = "Reset Player"
+
+[connection signal="pressed" from="PauseMenu/Button" to="PauseMenu" method="_on_button_pressed"]
+[connection signal="pressed" from="PauseMenu/Button2" to="PauseMenu" method="_on_button_2_pressed"]
+[connection signal="pressed" from="PauseMenu/Button3" to="PauseMenu" method="_on_button_3_pressed"]

@@ -1,5 +1,8 @@
 extends CharacterBody3D
 
+# for death...
+var is_frozen: bool = false
+
 # to get the Health bar HUD working...
 @onready var bar_health: TextureProgressBar = $CanvasLayer/HUD/bar_health
 
@@ -41,7 +44,7 @@ const FOV_CHANGE = 1.5
 
 # Devran's addition here: func _ready
 func _ready():	
-	process_mode = PROCESS_MODE_ALWAYS # Player node will always be processed even if game paused.
+	# process_mode = PROCESS_MODE_ALWAYS # Player node will always be processed even if game paused. [disabled because the player does not need to move when dead, and the pause menu serves as a restarter for levels.
 	
 	# Wait for level scene to finish loading
 	await get_tree().process_frame
@@ -126,6 +129,19 @@ func drop_cube() -> void:
 	held_object = null
 
 func _physics_process(delta: float) -> void:
+	if is_frozen:
+		# Apply gravity to player to make them fall
+		if not is_on_floor():
+			velocity.y -= 9.8 * delta
+		else:
+			# apply heavy friction once they hit the ground
+			velocity.x = move_toward(velocity.x, 0, 5.0 * delta)
+			velocity.z = move_toward(velocity.z, 0, 5.0 * delta)
+			velocity.y = 0
+			
+		move_and_slide()
+		return # Skips running the player inputs.
+		
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -228,12 +244,22 @@ func _heal(amount): # added healing on 16/10/2026
 func _die():
 	print("Player is dead.") # Again, print to console.
 	
+	# freeze player controls
+	is_frozen = true
+	
 	# force 100% greyscale if HP dropped into negatives.
 	if camera.environment:
 		camera.environment.adjustment_saturation = 0.0
 		
 	# Release the mouse so the player can interact with UI menus
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	# Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE) (make sure this doesn't interfere with the global 'Esc' to unlock mouse
 	
-	# Pause the level scene loop
-	get_tree().paused = true
+	# set_physics_process(false) # Disable movement. (if uncommented, the player will instantly tilt to their side like Half-Life 1.)
+	# turn the player into a simulated physical object that rolls and falls (as they are a pill shape), basically a first person ragdoll
+	motion_mode = MOTION_MODE_GROUNDED # standard ground mode fallback
+	physics_interpolation_mode = PHYSICS_INTERPOLATION_MODE_INHERIT
+	process_mode = PROCESS_MODE_INHERIT # change the body type to rigid so gravity has an effect
+	
+	# push the player slightly so they aren't left standing.
+	rotation.z = deg_to_rad(75) # tip them over onto their side
+	velocity.y = -1.0           # tiny downward push to settle into the floor
