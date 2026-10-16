@@ -108,6 +108,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Crosshair" type="TextureRect" parent="CanvasLayer/HUD" unique_id=1743280326]
 layout_mode = 1
