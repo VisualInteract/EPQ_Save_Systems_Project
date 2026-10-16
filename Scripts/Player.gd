@@ -206,7 +206,7 @@ func _takedamage(amount, type):
 		_die()
 
 func _heal(amount): # added healing on 16/10/2026
-	if health > 200:
+	if health < 200:
 		health += amount
 		print("Player healed. HP = ", amount)
 		var current_hp = clamp(health, 0.0, MAX_HEALTH)
