@@ -40,9 +40,7 @@ const FOV_CHANGE = 1.5
 @onready var camera = $Head/Camera3D
 
 # Devran's addition here: func _ready
-# Lock the mouse to the camera so that we can look around
-func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+func _ready():	
 	process_mode = PROCESS_MODE_ALWAYS # Player node will always be processed even if game paused.
 	
 	# Wait for level scene to finish loading
@@ -65,6 +63,10 @@ func _ready():
 	bar_health.value = health
 
 func _unhandled_input(event):
+	# Lock the mouse to the camera so that we can look around (new method)
+	if event is InputEventMouseButton and event.pressed:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
 	if event is InputEventMouseMotion:
 		head.rotate_y(-event.relative.x * SENSITIVITY)
 		camera.rotate_x(-event.relative.y * SENSITIVITY)
