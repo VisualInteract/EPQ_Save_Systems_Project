@@ -17,6 +17,10 @@ const SPRINT_SPEED = 8.5 ###
 const JUMP_VELOCITY = 4.5
 const SENSITIVITY = 0.01 ### Tutorial said 0.03, but I changed this to 0.01 because that is too high.
 
+# Coyote time for better jumps
+const COYOTETIME: float = 0.15 # duration in seconds
+var COYOTETIMER: float = 0.0 # track the grace time
+
 # Headbob variables
 const BOB_FREQ = 1.0 # Originally 2.0, but excessive headbob is annoying in my experience, so I usually always set it to minimal values.
 const BOB_AMP = 0.04
@@ -65,10 +69,17 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+		# tick coyote timer in air
+		COYOTETIMER -= delta
+	else:
+		COYOTETIMER = COYOTETIME
 
 	# Handle jump.
-	if Input.is_action_just_pressed("move_jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed("move_jump"): #and is_on_floor():
+		# Check if the coyote timer is still active instead of is_on_floor()
+		if COYOTETIMER > 0.0:
+			velocity.y = JUMP_VELOCITY
+			COYOTETIMER = 0.0 # clear timer so that player can't double-jump
 	
 	# Handle sprint // devran
 	if Input.is_action_pressed("move_sprint"):
