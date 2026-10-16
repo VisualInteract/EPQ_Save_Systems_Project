@@ -205,6 +205,20 @@ func _takedamage(amount, type):
 	if health <= 0:
 		_die()
 
+func _heal(amount): # added healing on 16/10/2026
+	health += amount
+	print("Player healed. HP = ", amount)
+	var current_hp = clamp(health, 0.0, MAX_HEALTH)
+	
+	bar_health.value = health
+	
+	if camera.environment and camera.environment.adjustment_enabled:
+		if current_hp <= GREYSCALE_THRESHOLD:
+			var saturation_ratio = current_hp / GREYSCALE_THRESHOLD
+			camera.environment.adjustment_saturation = saturation_ratio
+		else:
+			camera.environment.adjustment_saturation = 1.0
+
 func _die():
 	print("Player is dead.") # Again, print to console.
 	
